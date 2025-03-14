@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Outbox.Abstractions.Models;
 using Outbox.Core.Leasing;
+using Outbox.Core.Metrics;
 using Outbox.Core.Optimistic;
 using Outbox.Core.Options;
 using Outbox.Core.Pessimistic;
@@ -12,6 +13,8 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddOutboxCore(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddSingleton<IOutboxMetricsContainer, OutboxMetricsContainer>();
+
         services.Configure<DatabaseOptions>(configuration.GetSection(DatabaseOptions.Section));
         
         services.Configure<LeasingOptions>(configuration.GetSection(LeasingOptions.Section));
