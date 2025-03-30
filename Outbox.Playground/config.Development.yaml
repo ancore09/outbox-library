@@ -1,0 +1,26 @@
+Logging:
+  LogLevel:
+    Default: Information
+    Microsoft.AspNetCore: Warning
+    
+DatabaseOptions:
+  Host: localhost
+  Port: 5555
+  Database: outbox
+  Username: postgres
+  Password: postgres
+  
+SenderOptions:
+  Server: "localhost:9092"
+  ClientId: outbox
+  
+GraylogOptions:
+  Host: localhost
+  Port: 12201
+  
+Serilog:
+  MinimumLevel:
+    Default: Debug
+    Override:
+      Microsoft: Warning
+      System: Warning

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Outbox.Core.Metrics;
 using Outbox.Core.Options;
 using Outbox.Core.Repositories;
 
@@ -16,13 +17,15 @@ public class NewTaskAcquirerService : INewTaskAcquirerService
     private readonly IWorkerTasksContainer _container;
     private readonly ILogger<NewTaskAcquirerService> _logger;
     private readonly IOptionsMonitor<LeasingOptions> _options;
+    private readonly IOutboxMetricsContainer _metricsContainer;
 
-    public NewTaskAcquirerService(IWorkerTaskRepository workerTaskRepository, IWorkerTasksContainer container, ILogger<NewTaskAcquirerService> logger, IOptionsMonitor<LeasingOptions> options)
+    public NewTaskAcquirerService(IWorkerTaskRepository workerTaskRepository, IWorkerTasksContainer container, ILogger<NewTaskAcquirerService> logger, IOptionsMonitor<LeasingOptions> options, IOutboxMetricsContainer metricsContainer)
     {
         _workerTaskRepository = workerTaskRepository;
         _container = container;
         _logger = logger;
         _options = options;
+        _metricsContainer = metricsContainer;
     }
 
     public async Task<bool> TryAcquireNewTask()
@@ -49,6 +52,8 @@ public class NewTaskAcquirerService : INewTaskAcquirerService
             _logger.LogInformation("Acquired new task: {task}", workerTask.Topic);
 
             await _container.AddOrUpdateTask(workerTask);
+            
+            _metricsContainer.AddTaskEvent("acquire", [workerTask.Topic]);
 
             return true;
         }

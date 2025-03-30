@@ -49,6 +49,9 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IWorkerTasksContainer, WorkerTasksContainer>();
         services.AddScoped<ILeaseProlongationService, LeaseProlongationService>();
         services.AddScoped<ILeasingOutboxProcessor, LeasingLeasingOutboxProcessor>();
+        
+        services.AddHostedService<NewTaskAcquirerBackgroundService>();
+        services.AddHostedService<LeaseProlongationBackgroundService>();
 
         return services;
     }
@@ -56,6 +59,7 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddPessimistic(this IServiceCollection services)
     {
         services.AddScoped<IPessimisticOutboxProcessor, PessimisticOutboxProcessor>();
+        services.AddHostedService<PessimisticBackgroundService>();
 
         return services;
     }
@@ -63,6 +67,7 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddOptimistic(this IServiceCollection services)
     {
         services.AddScoped<IOptimiticOutboxProcessor, OptimiticOutboxProcessor>();
+        services.AddHostedService<OptimisticBackgroundService>();
 
         return services;
     }

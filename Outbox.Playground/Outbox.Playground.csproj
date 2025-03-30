@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Protobuf Include="Protos\greet.proto" GrpcServices="Server"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Grpc.AspNetCore" Version="2.64.0"/>
+        <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.70.0" />
+        <PackageReference Include="Confluent.Kafka" Version="2.6.1" />
+        <PackageReference Include="NetEscapades.Configuration.Yaml" Version="3.1.0" />
+        <PackageReference Include="Npgsql.DependencyInjection" Version="9.0.1" />
+        <PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="1.10.0-beta.1" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.10.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.9.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.10.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.Process" Version="0.5.0-beta.7" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.9.0" />
+        <PackageReference Include="Serilog" />
+        <PackageReference Include="Serilog.AspNetCore" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Outbox.Dapper\Outbox.Dapper.csproj" />
+    </ItemGroup>
+
+</Project>

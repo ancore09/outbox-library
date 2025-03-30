@@ -2,20 +2,22 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Outbox.Core.Leasing;
+using Outbox.Core.Metrics;
 using Outbox.Core.Options;
 
-namespace Outbox.Infrastructure.Leasing;
+namespace Outbox.Core.Leasing;
 
 public class NewTaskAcquirerBackgroundService : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly IOptionsMonitor<LeasingOptions> _leasingOptions;
+    private readonly IOutboxMetricsContainer _metricsContainer;
 
-    public NewTaskAcquirerBackgroundService(IServiceProvider serviceProvider, IOptionsMonitor<LeasingOptions> leasingOptions)
+    public NewTaskAcquirerBackgroundService(IServiceProvider serviceProvider, IOptionsMonitor<LeasingOptions> leasingOptions, IOutboxMetricsContainer metricsContainer)
     {
         _serviceProvider = serviceProvider;
         _leasingOptions = leasingOptions;
+        _metricsContainer = metricsContainer;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -23,6 +25,8 @@ public class NewTaskAcquirerBackgroundService : BackgroundService
         var _logger = _serviceProvider.GetRequiredService<ILogger<NewTaskAcquirerBackgroundService>>();
 
         _logger.LogInformation("Leasing Outbox started");
+        
+        _metricsContainer.AddUsedMechanism("leasing");
 
         await using var scope = _serviceProvider.CreateAsyncScope();
         var serviceProvider = scope.ServiceProvider;

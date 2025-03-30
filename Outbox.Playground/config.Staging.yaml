@@ -1,0 +1,59 @@
+#Logging:
+#  LogLevel:
+#    Default: Information
+#    Microsoft.AspNetCore: Warning
+#    Microsoft.AspNetCore.Hosting.Diagnostics: Warning
+
+DatabaseOptions:
+  Host: 192.168.1.106
+  Port: 5432
+  Database: outbox
+  Username: postgres
+  Password: postgres
+
+SenderOptions:
+  Server: "192.168.1.106:9092"
+  ClientId: outbox
+
+GraylogOptions:
+  Host: 192.168.1.115
+  Port: 12201
+
+Serilog:
+  MinimumLevel:
+    Default: Information
+    Override:
+      Microsoft: Warning
+      System: Warning
+      
+OutboxOptions:
+#  Type: None
+  Type: Leasing
+#  Type: Pessimistic
+#  Type: Optimistic
+  
+LeasingOptions:
+  NewTaskCheckIntervalSeconds: 10
+  TaskProlongationCheckIntervalSeconds: 10
+  TaskProlongationThresholdSeconds: 15
+  LeaseDurationMinutes: 1
+  ThrottlingMilliseconds: 10
+  DelaySeconds: 10
+  
+PessimisticOptions:
+  BatchSize: 500
+  Workers: 5
+  ThrottlingMilliseconds: 10
+  DelaySeconds: 10
+  
+OptimisticOptions:
+  ThrottlingMilliseconds: 0
+  DelaySeconds: 10
+  Reminders: 25
+  Workers: 100
+  RandomRange: 20
+  
+GeneratorOptions:
+  Enabled: false
+  IntervalSeconds: 0
+  BatchSize: 10000

@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Outbox.Core.Metrics;
 using Outbox.Core.Options;
 
 namespace Outbox.Core.Optimistic;
@@ -10,6 +11,7 @@ public class OptimisticBackgroundService : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly IOptionsMonitor<OptimisticOptions> _options;
+    private readonly IOutboxMetricsContainer _metricsContainer;
 
     public OptimisticBackgroundService(IServiceProvider serviceProvider, IOptionsMonitor<OptimisticOptions> options)
     {
@@ -22,6 +24,8 @@ public class OptimisticBackgroundService : BackgroundService
         var _logger = _serviceProvider.GetRequiredService<ILogger<OptimisticBackgroundService>>();
 
         _logger.LogInformation("Optimistic Outbox started");
+        _metricsContainer.AddUsedMechanism("optimistic");
+
 
         var tasks = Enumerable.Range(1, _options.CurrentValue.Workers).Select(x => StartWork(stoppingToken)).ToList();
         // var tasks = Enumerable.Range(0, _options.CurrentValue.Workers).Select(i => StartWorkByReminder(i, stoppingToken)).ToList();
