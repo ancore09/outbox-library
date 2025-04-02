@@ -97,6 +97,7 @@ public class WorkerTasksContainer : IWorkerTasksContainer
 
     public async Task<List<WorkerTask>> GetWorkerTasks()
     {
+        await Task.CompletedTask;
         return _container.Values.Select(x => x.Config).ToList();
     }
 

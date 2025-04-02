@@ -25,7 +25,7 @@ public static class ServiceCollectionExtensions
 
         var outboxOptions = outboxOptionsSection.Get<OutboxOptions>();
 
-        switch (outboxOptions.Type)
+        switch (outboxOptions!.Type)
         {
             case OutboxType.Leasing:
                 services.AddLeasing();

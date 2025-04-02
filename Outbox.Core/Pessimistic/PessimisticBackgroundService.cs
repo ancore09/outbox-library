@@ -13,10 +13,11 @@ public class PessimisticBackgroundService : BackgroundService
     private readonly IOptionsMonitor<PessimisticOptions> _options;
     private readonly IOutboxMetricsContainer _metricsContainer;
 
-    public PessimisticBackgroundService(IServiceProvider serviceProvider, IOptionsMonitor<PessimisticOptions> options)
+    public PessimisticBackgroundService(IServiceProvider serviceProvider, IOptionsMonitor<PessimisticOptions> options, IOutboxMetricsContainer metricsContainer)
     {
         _serviceProvider = serviceProvider;
         _options = options;
+        _metricsContainer = metricsContainer;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
